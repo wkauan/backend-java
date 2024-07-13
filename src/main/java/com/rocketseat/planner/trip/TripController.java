@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rocketseat.planner.participant.Participant;
 import com.rocketseat.planner.participant.ParticipantCreateResponse;
+import com.rocketseat.planner.participant.ParticipantData;
 import com.rocketseat.planner.participant.ParticipantRequestPayload;
 import com.rocketseat.planner.participant.ParticipantService;
 
@@ -101,9 +101,9 @@ public class TripController {
     }
 
     @GetMapping("/{id}/participants")
-    public ResponseEntity<List<Participant>> getAllParticipants(@PathVariable UUID id) {
-        List<Participant> participantList = this.participantService.getAllParticipantsFromEvent(id);
+    public ResponseEntity<List<ParticipantData>> getAllParticipants(@PathVariable UUID id) {
+        List<ParticipantData> participantData = this.participantService.getAllParticipantsFromEvent(id);
 
-        return ResponseEntity.ok(participantList);
+        return ResponseEntity.ok(participantData);
     }
 }
