@@ -20,6 +20,10 @@ import com.rocketseat.planner.activity.ActivityCreateResponse;
 import com.rocketseat.planner.activity.ActivityData;
 import com.rocketseat.planner.activity.ActivityRequestPayload;
 import com.rocketseat.planner.activity.ActivityService;
+import com.rocketseat.planner.link.LinkCreateResponse;
+import com.rocketseat.planner.link.LinkData;
+import com.rocketseat.planner.link.LinkRequestPayload;
+import com.rocketseat.planner.link.LinkService;
 import com.rocketseat.planner.participant.ParticipantCreateResponse;
 import com.rocketseat.planner.participant.ParticipantData;
 import com.rocketseat.planner.participant.ParticipantRequestPayload;
@@ -33,6 +37,9 @@ public class TripController {
 
     @Autowired
     private ActivityService activityService;
+
+    @Autowired
+    private LinkService linkService;
 
     @Autowired
     private TripRepository repository;
@@ -135,5 +142,28 @@ public class TripController {
         List<ActivityData> activityDataList = this.activityService.getAllActivitiesFromId(id);
 
         return ResponseEntity.ok(activityDataList);
+    }
+
+    @PostMapping("/{id}/links")
+    public ResponseEntity<LinkCreateResponse> registerLink(@PathVariable UUID id, @RequestBody LinkRequestPayload payload) {
+        Optional<Trip> trip = this.repository.findById(id);
+
+        if(trip.isPresent()) {
+            Trip rawTrip = trip.get();
+
+            LinkCreateResponse linkCreateResponse = this.linkService.registerLink(payload, rawTrip);
+            
+
+            return ResponseEntity.ok(linkCreateResponse);
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/{id}/links")
+    public ResponseEntity<List<LinkData>> getAllLinks(@PathVariable UUID id) {
+        List<LinkData> linkDataList = this.linkService.getAllLinksFromId(id);
+
+        return ResponseEntity.ok(linkDataList);
     }
 }
